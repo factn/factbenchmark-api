@@ -1,0 +1,158 @@
+FORMAT: 1A
+HOST: http://fnn.apiblueprint.org/
+
+# FNN Realtime Benchmark 
+
+This API aims to provide an independent third party that can facilitate 
+a collective, shared resource created by and for researchers 
+working in Fake News detection to push the state of the art in realtime semi or fully automated
+technique. 
+
+We aim to support work around:
+* finding 'check worthy' claims
+* determining the veracity of those claims.
+
+The wider principles of this benchmark are outlined here. 
+
+A more narrative form of documentation is here.
+
+# Group Claims
+
+## Claim [/claims/{id}]
+
+A claim is any statement with an attribution.
+
+To be interesting for analysis a claim should be 
+falsifiable and of general interest.
+
+**Update Model**
+* idempotent
+
++ Parameters
+    + id (string)
+
+        The ID of the desired claim.
+
++ Attributes (Claim Base)
+    + id: `08ff7052-2e95-11e3-a1fc-000c294eede0` (Guid) - unique id
+    + created: `2019-01-01T01:23:00.000Z` (ISODate) - time stamp when data entered into store
+
+### Retrieve a Claim [GET]
+Retrieves the claim with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Claim)
+
+## Claims [/claims{?limit}]
+
++ Attributes (array[Claim])
+
+### List all Claims [GET]
+Returns a list of your claims.
+
++ Parameters
+    + limit (number, optional)
+
+        A limit on the number of objects to be returned. Limit can range
+        between 1 and 100 items.
+
+        + Default: `10`
+
++ Response 200 (application/json)
+    + Attributes (Claims)
+
+
+
+## Rumor [/rumors]
+
+
+### List All Rumors [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 2048
+                    }, {
+                        "choice": "Python",
+                        "votes": 1024
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 512
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 256
+                    }
+                ]
+            }
+        ]
+
+### Create a New Question [POST]
+
+You may create your own question using this action. It takes a JSON
+object containing a question and a collection of answers in the
+form of choices.
+
++ Request (application/json)
+
+        {
+            "question": "Favourite programming language?",
+            "choices": [
+                "Swift",
+                "Python",
+                "Objective-C",
+                "Ruby"
+            ]
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 0
+                    }, {
+                        "choice": "Python",
+                        "votes": 0
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 0
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 0
+                    }
+                ]
+            }
+
+# Data Structures
+## Guid (string)
+## ISODate (string)
+## Url (string)
+## Attribution Uri (string)
+## User (string)
+## Claim Base
++ claim_text: 'Student arrested for shouting slogans against BJP in Tamil Nadu' (string)
++ source: `https://twitter.com/anindita_guha/status/1036924232595382273` (Url) - uri to source, when available
++ attribution: `https://twitter.com/LKC1965` (Attribution Uri) - lowest level identifier of the user/entity to attribute to
++ timestamp: `2018-09-04T04:29:00.000Z` (ISODate) - time stamp of original source
++ raw (string) - raw data for source where available
++ submitted_by: `faktist216` (User)
++ hidden_date (ISODate) - date hidden, if hidden
+
+
+
+
