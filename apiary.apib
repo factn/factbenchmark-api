@@ -1,0 +1,262 @@
+FORMAT: 1A
+HOST: http://fnnrb.io/
+
+# FNN Realtime Benchmark 
+
+This API aims to provide an independent third party that can facilitate 
+a collective, shared resource created by and for researchers 
+working in Fake News detection to push the state of the art in realtime semi or fully automated
+technique. 
+
+We aim to support work around:
+* finding 'check worthy' claims
+* determining the veracity of those claims.
+
+The wider principles of this benchmark are outlined here. 
+
+A more narrative form of documentation is here.
+
+# Group Claims
+
+## Claim [/claims/{id}]
+
+A claim is any statement with an attribution.
+
+To be interesting for analysis a claim should be 
+falsifiable and of general interest.
+
+**Update Model**: idempotent
+
++ Parameters
+    + id (string)
+
+        The ID of the desired claim.
+        
++ Attributes (Claim Base)
+    + id: `08ff7052-2e95-11e3-a1fc-000c294eede0` (Guid) - unique id
+    + created: `2019-01-01T01:23:00.000Z` (ISODate) - time stamp when data entered into store
+
+### Submit a Claim [POST]
+Submit a claim for consideration in the benchmark.
+
++ Attributes (object)
+    + claim_text: 'Student arrested for shouting slogans against BJP in Tamil Nadu' (string)
+    + source: `https://twitter.com/anindita_guha/status/1036924232595382273` (Url) - uri to source, when available
+    + attribution: `https://twitter.com/LKC1965` (Attribution Uri) - lowest level identifier of the user/entity to attribute to
+  
++ Request (application/json)
+
++ Response 200 (application/json)
+    + Attributes (Claim)
+
+
+### Retrieve a Claim [GET]
+Retrieves the claim with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Claim)
+
+## Claims [/claims{?last_seen}]
+
++ Attributes (array[Claim])
+
+### List all Claims [GET]
+Subscribe to a websocket to receive notification of claims as they are published.
+
++ Parameters
+    + last_seen (string, optional)
+
+        The timestamp of the last claim received by client (only send claims after this).
+
++ Response 200 (application/json)
+    + Attributes (Claims)
+
+# Group Rumors
+
+## Rumor [/rumors/{id}]
+
+Claims (and articles) are sometimes grouped together as relating to the same 'rumour'.
+
+A claim must be attached to a rumor to be entered into the benchmark. 
+
+Claims can be submitted and calls made at any time, but they are not considered part of the benchmark until they are approved. 
+
+**Update Model**: CDRT log
+
++ Parameters
+    + id (string)
+
+        The ID of the desired Rumor.
+        
++ Attributes (Rumor Base)
+
+### Retrieve a Rumor [GET]
+Retrieves the Rumor with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Rumor Base)
+
+## Rumors [/rumors{?last_seen}]
+
++ Attributes (array[Rumor])
+
+### List all Rumors [GET]
+Subscribe to a websocket to receive notification of Rumors as they are approved for the benchmark.
+
++ Parameters
+    + last_seen (string, optional)
+
+        The timestamp of the last Rumor received by client (only send Rumors after this).
+
++ Response 200 (application/json)
+    + Attributes (Rumors)
+
+# Group Calls
+
+## Call [/calls/{id}]
+
+A call is an evaluation as to the veracity of a statement. 
+
+This is the primary method by which reputation points are earned in the benchmark. 
+
+There are three four ways that a rumor can be responded to:
+* Be classified as simple boolean true or false
+* Be classified as true, to some degree between 0 and 1
+* Decline to rate as not falsfiable or suggest a better phrasing
+* Simply submit arbitrary data against the rumor (which will be indepdently timestamped and preserved for the record)
+
+**Update Model**: Idempotent
+
++ Parameters
+    + id (string)
+
+        The ID of the  call to retrive.
+        
++ Attributes (Call Base)
+
+### Retrieve a call [GET]
+Retrieves the call with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Call Base)
+
+## Calls [/calls{?last_seen,regarding}]
+
++ Attributes (array[Call])
+
+### List all Calls [GET]
+
+Subscribe to a websocket to receive notification of calls as they are received, and/or relating to a specific rumor.
+
++ Parameters
+    + last_seen (string, optional)
+
+        The timestamp of the last call received by client (only send Calls after this).
+
+    + regarding (url, optional)
+
+        The timestamp of the last call received by client (only send Calls after this).
+
+
++ Response 200 (application/json)
+    + Attributes (Calls)
+
+
+# Group Post
+
+## Post [/post/{id}]
+
+A post is a longer statement with or without attribution. 
+
+To be interesting for analysis a post should be 
+falsifiable and of general interest (in the same way
+as described for claims).
+
+A post is a more general form of a claim. 
+
+### Retrieve Post [GET]
+
+Retrieves content with the given id
+
++ Parameters
+    + id (string)
+
+        The ID of the post to retrive.
+        
++ Attributes (Call Base)
+
++ Response 200 (application/json)
+    + Attributes (Post Base)
+    
+# Group Content 
+
+## Content [/content/{hash}]
+
+In order to allow and sharing of associated data in a time-stamped
+verifiable way between members of the network, the API also includes a timestamped 
+merkle tree of content, accessible via content hash tree.
+
+# Group Users
+
+## User [/user/{hash}]
+
+### Retrieve content [GET]
+
+Retrieves content with the given ContentHash
+
++ Response 200 (application/json)
+    + Attributes (ContentHash)
+    
+# Data Structures
+## Guid (string)
+## ISODate (string)
+## Url (string)
+## Attribution Uri (string)
+## User (string)
+## ContentHash (object)
++ hash (string)
++ data (string)
++ mime-type (string)
+
+## DeclineReason(enum[string])
++ `not falsifiable`
++ `not falsifiable - better option exists`
++ `not a good summation`
++ `not a good summation - better option exists`
+
+## DeclineToRate(object)
++ reason (DeclineReason) - Reason for declining to rate 
++ preferred_alternative (optional, Url) - Suggested alternative, if any
+
+## Claim Base
++ claim_text: 'Student arrested for shouting slogans against BJP in Tamil Nadu' (string)
++ source: `https://twitter.com/anindita_guha/status/1036924232595382273` (Url) - uri to source, when available
++ attribution: `https://twitter.com/LKC1965` (Attribution Uri) - lowest level identifier of the user/entity to attribute to
++ timestamp: `2018-09-04T04:29:00.000Z` (ISODate) - time stamp of original source
++ raw (ContentHash) - hash of raw content (for/from content cache)
++ submitted_by: `faktist216` (User)
++ hidden_date (ISODate) - date hidden, if hidden
+
+## Rumor Base
++ id: `ca07bbdb-75f9-462c-a2f6-e3cb0ab65c2d` (Guid) - unique id
++ created: `2019-01-01T04:10:00.000Z` (ISODate) - time stamp when rumor created
++ label: `Student arrested for shouting slogans against BJP in Tamil Nadu` (string) - Preferred label of rumor (for use in UI)
++ related_claims (array[Claim]) - claims associated with this rumor
++ preferred_claim (Claim) 
+
+## Call Base 
++ call: true (optional, boolean) - True/false value 
++ weighting: 0.7 (optional, number) - Amount true (call must be true if this weighting is non null)
++ timestamp: `2018-09-04T04:29:00.000Z` (ISODate) - time stamp of original source
++ submitted_by: `faktist216` (User)
++ data (optional, ContentHash) - hash of supporting information/data
++ decline (optional, DeclineToRate) - decline to rate and related reasons 
+
+## Post Base
++ label: 'Posting this message on your facebook will earn you money' (string) - created by submitter to summarize post, but not normative
++ source (Url) - uri to source, when available
++ attribution (Attribution Uri) - lowest level identifier of the user/entity to attribute to, when available
++ timestamp: `2018-09-04T04:29:00.000Z` (ISODate) - time stamp of original source
++ raw (ContentHash) - hash of raw content (for/from content cache)
++ submitted_by (User)
++ hidden_date (ISODate) - date hidden, if hidden
