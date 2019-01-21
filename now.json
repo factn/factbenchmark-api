@@ -1,0 +1,6 @@
+{
+  "alias": "factbench-api",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
