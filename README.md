@@ -1,2 +1,2 @@
-# fnn-api
-FNN Realtime Network Benchmark
+# Fact Benchmark API 
+Realtime Network Benchmark API
