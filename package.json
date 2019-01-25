@@ -27,9 +27,14 @@
     "mocha": "mocha test/ --recursive --exit"
   },
   "dependencies": {
+    "express": "^4.16.4",
+    "osprey-mock-service": "^0.4.1",
+    "raml-mock-service": "^1.0.0"
   },
   "devDependencies": {
+    "api-designer": "^0.4.1",
     "eslint": "^5.12.1",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "osprey-cli": "^0.1.3"
   }
 }
