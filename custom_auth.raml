@@ -1,0 +1,14 @@
+description: |
+  A custom security scheme for easy auth during the alpha test period
+type: x-custom
+describedBy:
+  headers:
+    Signature:
+      description: |
+        Used to send a signature token
+      type: string
+  responses:
+    401:
+      description: |
+        Bad token.
+    403:

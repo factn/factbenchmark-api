@@ -3,17 +3,26 @@ title: Fact Benchmark API
 baseUri: http://factapi.org/{version}
 version: v0.5
 baseUriParameters: {}
-protocols:
-- HTTP
+protocols: [  HTTP, HTTPS ]
+mediaType: [ application/json ]
 documentation:
 - title: Fact Benchmark API
   content: "This API aims to provide an independent, realtime, collective shared resource by which researchers in the field can collaborate"
+
+securitySchemes:
+  oauth_1_0: !include oauth_1_0.raml
+  alpha_auth_scheme: !include custom_auth.raml
+
+securedBy: [alpha_auth_scheme, oauth_1_0]
+
 /statements:
   get:
+    queryParameters:
+      author:
   post:
   /{id}:
     get:
-    /annotatoins:
+    /annotations:
       get:
     /responses:
       get:
