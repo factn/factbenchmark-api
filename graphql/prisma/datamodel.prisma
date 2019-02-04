@@ -1,0 +1,70 @@
+type Agent {
+  id: ID! @unique
+  email: String! @unique
+  password: String!
+  name: String
+}
+
+type Claim {
+  id: ID! @unique
+  claim_text: String!
+  claim_timestamp: DateTime!
+  support: ClaimSupport!
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Response {
+  check_worthy: CheckWorthy,
+  truth_rating: TruthRating,
+  annotation: [Annotation],
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type TruthRating {
+  call: Boolean! @default(value: "false")
+  truthiness: Float,
+  support: [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+  #
+  #  we have to add a @relation to get this to work     
+  #    refute: [Annotation!] 
+}
+
+type CheckWorthy {
+  call: Boolean! @default(value: "false")
+  check_worthiness: Float,
+  support: [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+
+type ClaimSupport {
+  attributions: [Attribution!]
+}
+
+type Attribution {
+  source_url: String
+  snapshot: Content
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Annotation {
+  source_url: String
+  # replace data with graphql-type-json instead of string
+  data: String
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Content {
+  hash: String
+  mime_type: String
+  data: String
+  created: DateTime!
+  submitted_by: Agent!
+}

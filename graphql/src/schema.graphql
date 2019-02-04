@@ -1,0 +1,26 @@
+scalar DateTime
+
+type Query {
+  me: Agent
+  allClaims: [Claim!]!
+  findClaims(searchString: String): [Claim!]!
+  claim(id: ID!): Claim
+}
+
+type Mutation {
+  submitClaim(title: String!, content: String): Claim!
+  signup(email: String!, password: String!, name: String): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+}
+
+type AuthPayload {
+  token: String!
+  Agent: Agent!
+}
+
+type Agent {
+  id: ID!
+  email: String!
+  name: String
+  claims: [Claim!]!
+}
