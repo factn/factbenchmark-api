@@ -1,51 +1,437 @@
-scalar DateTime
-
-type Agent {
-  id: String!
-  email: String! 
+type Agent implements Node {
+  id: ID!
+  email: String!
   password: String!
   name: String
 }
 
-type Claim {
-  id: String!
-  claim_text: String!
-  claim_timestamp: DateTime!
-  support: ClaimSupport!
+# A connection to a list of items.
+type AgentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [AgentEdge]!
+  aggregate: AggregateAgent!
+}
+
+input AgentCreateInput {
+  email: String!
+  password: String!
+  name: String
+}
+
+input AgentCreateOneInput {
+  create: AgentCreateInput
+  connect: AgentWhereUniqueInput
+}
+
+# An edge in a connection.
+type AgentEdge {
+  # The item at the end of the edge.
+  node: Agent!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum AgentOrderByInput {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AgentPreviousValues {
+  id: ID!
+  email: String!
+  password: String!
+  name: String
+}
+
+type AgentSubscriptionPayload {
+  mutation: MutationType!
+  node: Agent
+  updatedFields: [String!]
+  previousValues: AgentPreviousValues
+}
+
+input AgentSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [AgentSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AgentSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AgentSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: AgentWhereInput
+}
+
+input AgentUpdateDataInput {
+  email: String
+  password: String
+  name: String
+}
+
+input AgentUpdateInput {
+  email: String
+  password: String
+  name: String
+}
+
+input AgentUpdateManyMutationInput {
+  email: String
+  password: String
+  name: String
+}
+
+input AgentUpdateOneRequiredInput {
+  create: AgentCreateInput
+  connect: AgentWhereUniqueInput
+  update: AgentUpdateDataInput
+  upsert: AgentUpsertNestedInput
+}
+
+input AgentUpsertNestedInput {
+  update: AgentUpdateDataInput!
+  create: AgentCreateInput!
+}
+
+input AgentWhereInput {
+  # Logical AND on all given filters.
+  AND: [AgentWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AgentWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AgentWhereInput!]
+  id: ID
+  # All values that are not equal to given value.
+  id_not: ID
+  # All values that are contained in given list.
+  id_in: [ID!]
+  # All values that are not contained in given list.
+  id_not_in: [ID!]
+  # All values less than the given value.
+  id_lt: ID
+  # All values less than or equal the given value.
+  id_lte: ID
+  # All values greater than the given value.
+  id_gt: ID
+  # All values greater than or equal the given value.
+  id_gte: ID
+  # All values containing the given string.
+  id_contains: ID
+  # All values not containing the given string.
+  id_not_contains: ID
+  # All values starting with the given string.
+  id_starts_with: ID
+  # All values not starting with the given string.
+  id_not_starts_with: ID
+  # All values ending with the given string.
+  id_ends_with: ID
+  # All values not ending with the given string.
+  id_not_ends_with: ID
+  email: String
+  # All values that are not equal to given value.
+  email_not: String
+  # All values that are contained in given list.
+  email_in: [String!]
+  # All values that are not contained in given list.
+  email_not_in: [String!]
+  # All values less than the given value.
+  email_lt: String
+  # All values less than or equal the given value.
+  email_lte: String
+  # All values greater than the given value.
+  email_gt: String
+  # All values greater than or equal the given value.
+  email_gte: String
+  # All values containing the given string.
+  email_contains: String
+  # All values not containing the given string.
+  email_not_contains: String
+  # All values starting with the given string.
+  email_starts_with: String
+  # All values not starting with the given string.
+  email_not_starts_with: String
+  # All values ending with the given string.
+  email_ends_with: String
+  # All values not ending with the given string.
+  email_not_ends_with: String
+  password: String
+  # All values that are not equal to given value.
+  password_not: String
+  # All values that are contained in given list.
+  password_in: [String!]
+  # All values that are not contained in given list.
+  password_not_in: [String!]
+  # All values less than the given value.
+  password_lt: String
+  # All values less than or equal the given value.
+  password_lte: String
+  # All values greater than the given value.
+  password_gt: String
+  # All values greater than or equal the given value.
+  password_gte: String
+  # All values containing the given string.
+  password_contains: String
+  # All values not containing the given string.
+  password_not_contains: String
+  # All values starting with the given string.
+  password_starts_with: String
+  # All values not starting with the given string.
+  password_not_starts_with: String
+  # All values ending with the given string.
+  password_ends_with: String
+  # All values not ending with the given string.
+  password_not_ends_with: String
+  name: String
+  # All values that are not equal to given value.
+  name_not: String
+  # All values that are contained in given list.
+  name_in: [String!]
+  # All values that are not contained in given list.
+  name_not_in: [String!]
+  # All values less than the given value.
+  name_lt: String
+  # All values less than or equal the given value.
+  name_lte: String
+  # All values greater than the given value.
+  name_gt: String
+  # All values greater than or equal the given value.
+  name_gte: String
+  # All values containing the given string.
+  name_contains: String
+  # All values not containing the given string.
+  name_not_contains: String
+  # All values starting with the given string.
+  name_starts_with: String
+  # All values not starting with the given string.
+  name_not_starts_with: String
+  # All values ending with the given string.
+  name_ends_with: String
+  # All values not ending with the given string.
+  name_not_ends_with: String
+}
+
+input AgentWhereUniqueInput {
+  id: ID
+  email: String
+}
+
+type AggregateAgent {
+  count: Int!
+}
+
+type AggregateAnnotation {
+  count: Int!
+}
+
+type AggregateAttribution {
+  count: Int!
+}
+
+type AggregateCheckWorthy {
+  count: Int!
+}
+
+type AggregateClaim {
+  count: Int!
+}
+
+type AggregateClaimSupport {
+  count: Int!
+}
+
+type AggregateContent {
+  count: Int!
+}
+
+type AggregateResponse {
+  count: Int!
+}
+
+type AggregateTruthRating {
+  count: Int!
+}
+
+type Annotation {
+  source_url: String
+  data: String
   created: DateTime!
   submitted_by: Agent!
 }
 
-type Response {
-  check_worthy: CheckWorthy,
-  truth_rating: TruthRating,
-  annotation: [Annotation],
-  created: DateTime!
-  submitted_by: Agent!
+# A connection to a list of items.
+type AnnotationConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [AnnotationEdge]!
+  aggregate: AggregateAnnotation!
 }
 
-type TruthRating {
-  call: Boolean!
-  truthiness: Float,
-  support: [Annotation!]
+input AnnotationCreateInput {
+  source_url: String
+  data: String
   created: DateTime!
-  submitted_by: Agent!
-  #
-  #  we have to add a @relation to get this to work     
-  #    refute: [Annotation!] 
+  submitted_by: AgentCreateOneInput!
 }
 
-type CheckWorthy {
-  call: Boolean!
-  check_worthiness: Float,
-  support: [Annotation!]
-  created: DateTime!
-  submitted_by: Agent!
+input AnnotationCreateManyInput {
+  create: [AnnotationCreateInput!]
 }
 
+# An edge in a connection.
+type AnnotationEdge {
+  # The item at the end of the edge.
+  node: Annotation!
+  # A cursor for use in pagination.
+  cursor: String!
+}
 
-type ClaimSupport {
-  attributions: [Attribution!]
+enum AnnotationOrderByInput {
+  source_url_ASC
+  source_url_DESC
+  data_ASC
+  data_DESC
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AnnotationPreviousValues {
+  source_url: String
+  data: String
+  created: DateTime!
+}
+
+type AnnotationSubscriptionPayload {
+  mutation: MutationType!
+  node: Annotation
+  updatedFields: [String!]
+  previousValues: AnnotationPreviousValues
+}
+
+input AnnotationSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [AnnotationSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AnnotationSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AnnotationSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: AnnotationWhereInput
+}
+
+input AnnotationUpdateManyMutationInput {
+  source_url: String
+  data: String
+  created: DateTime
+}
+
+input AnnotationWhereInput {
+  # Logical AND on all given filters.
+  AND: [AnnotationWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AnnotationWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AnnotationWhereInput!]
+  source_url: String
+  # All values that are not equal to given value.
+  source_url_not: String
+  # All values that are contained in given list.
+  source_url_in: [String!]
+  # All values that are not contained in given list.
+  source_url_not_in: [String!]
+  # All values less than the given value.
+  source_url_lt: String
+  # All values less than or equal the given value.
+  source_url_lte: String
+  # All values greater than the given value.
+  source_url_gt: String
+  # All values greater than or equal the given value.
+  source_url_gte: String
+  # All values containing the given string.
+  source_url_contains: String
+  # All values not containing the given string.
+  source_url_not_contains: String
+  # All values starting with the given string.
+  source_url_starts_with: String
+  # All values not starting with the given string.
+  source_url_not_starts_with: String
+  # All values ending with the given string.
+  source_url_ends_with: String
+  # All values not ending with the given string.
+  source_url_not_ends_with: String
+  data: String
+  # All values that are not equal to given value.
+  data_not: String
+  # All values that are contained in given list.
+  data_in: [String!]
+  # All values that are not contained in given list.
+  data_not_in: [String!]
+  # All values less than the given value.
+  data_lt: String
+  # All values less than or equal the given value.
+  data_lte: String
+  # All values greater than the given value.
+  data_gt: String
+  # All values greater than or equal the given value.
+  data_gte: String
+  # All values containing the given string.
+  data_contains: String
+  # All values not containing the given string.
+  data_not_contains: String
+  # All values starting with the given string.
+  data_starts_with: String
+  # All values not starting with the given string.
+  data_not_starts_with: String
+  # All values ending with the given string.
+  data_ends_with: String
+  # All values not ending with the given string.
+  data_not_ends_with: String
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  submitted_by: AgentWhereInput
 }
 
 type Attribution {
@@ -55,12 +441,639 @@ type Attribution {
   submitted_by: Agent!
 }
 
-type Annotation {
+# A connection to a list of items.
+type AttributionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [AttributionEdge]!
+  aggregate: AggregateAttribution!
+}
+
+input AttributionCreateInput {
   source_url: String
-  # replace data with graphql-type-json instead of string
-  data: String
+  created: DateTime!
+  snapshot: ContentCreateOneInput
+  submitted_by: AgentCreateOneInput!
+}
+
+input AttributionCreateManyInput {
+  create: [AttributionCreateInput!]
+}
+
+# An edge in a connection.
+type AttributionEdge {
+  # The item at the end of the edge.
+  node: Attribution!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum AttributionOrderByInput {
+  source_url_ASC
+  source_url_DESC
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type AttributionPreviousValues {
+  source_url: String
+  created: DateTime!
+}
+
+input AttributionScalarWhereInput {
+  # Logical AND on all given filters.
+  AND: [AttributionScalarWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AttributionScalarWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AttributionScalarWhereInput!]
+  source_url: String
+  # All values that are not equal to given value.
+  source_url_not: String
+  # All values that are contained in given list.
+  source_url_in: [String!]
+  # All values that are not contained in given list.
+  source_url_not_in: [String!]
+  # All values less than the given value.
+  source_url_lt: String
+  # All values less than or equal the given value.
+  source_url_lte: String
+  # All values greater than the given value.
+  source_url_gt: String
+  # All values greater than or equal the given value.
+  source_url_gte: String
+  # All values containing the given string.
+  source_url_contains: String
+  # All values not containing the given string.
+  source_url_not_contains: String
+  # All values starting with the given string.
+  source_url_starts_with: String
+  # All values not starting with the given string.
+  source_url_not_starts_with: String
+  # All values ending with the given string.
+  source_url_ends_with: String
+  # All values not ending with the given string.
+  source_url_not_ends_with: String
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+}
+
+type AttributionSubscriptionPayload {
+  mutation: MutationType!
+  node: Attribution
+  updatedFields: [String!]
+  previousValues: AttributionPreviousValues
+}
+
+input AttributionSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [AttributionSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AttributionSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AttributionSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: AttributionWhereInput
+}
+
+input AttributionUpdateManyDataInput {
+  source_url: String
+  created: DateTime
+}
+
+input AttributionUpdateManyInput {
+  create: [AttributionCreateInput!]
+  updateMany: [AttributionUpdateManyWithWhereNestedInput!]
+  deleteMany: [AttributionScalarWhereInput!]
+}
+
+input AttributionUpdateManyMutationInput {
+  source_url: String
+  created: DateTime
+}
+
+input AttributionUpdateManyWithWhereNestedInput {
+  where: AttributionScalarWhereInput!
+  data: AttributionUpdateManyDataInput!
+}
+
+input AttributionWhereInput {
+  # Logical AND on all given filters.
+  AND: [AttributionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [AttributionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [AttributionWhereInput!]
+  source_url: String
+  # All values that are not equal to given value.
+  source_url_not: String
+  # All values that are contained in given list.
+  source_url_in: [String!]
+  # All values that are not contained in given list.
+  source_url_not_in: [String!]
+  # All values less than the given value.
+  source_url_lt: String
+  # All values less than or equal the given value.
+  source_url_lte: String
+  # All values greater than the given value.
+  source_url_gt: String
+  # All values greater than or equal the given value.
+  source_url_gte: String
+  # All values containing the given string.
+  source_url_contains: String
+  # All values not containing the given string.
+  source_url_not_contains: String
+  # All values starting with the given string.
+  source_url_starts_with: String
+  # All values not starting with the given string.
+  source_url_not_starts_with: String
+  # All values ending with the given string.
+  source_url_ends_with: String
+  # All values not ending with the given string.
+  source_url_not_ends_with: String
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  snapshot: ContentWhereInput
+  submitted_by: AgentWhereInput
+}
+
+type BatchPayload {
+  # The number of nodes that have been affected by the Batch operation.
+  count: Long!
+}
+
+type CheckWorthy {
+  call: Boolean!
+  check_worthiness: Float
+  support(
+    where: AnnotationWhereInput
+    orderBy: AnnotationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Annotation!]
   created: DateTime!
   submitted_by: Agent!
+}
+
+# A connection to a list of items.
+type CheckWorthyConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [CheckWorthyEdge]!
+  aggregate: AggregateCheckWorthy!
+}
+
+input CheckWorthyCreateInput {
+  call: Boolean
+  check_worthiness: Float
+  created: DateTime!
+  support: AnnotationCreateManyInput
+  submitted_by: AgentCreateOneInput!
+}
+
+input CheckWorthyCreateOneInput {
+  create: CheckWorthyCreateInput
+}
+
+# An edge in a connection.
+type CheckWorthyEdge {
+  # The item at the end of the edge.
+  node: CheckWorthy!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum CheckWorthyOrderByInput {
+  call_ASC
+  call_DESC
+  check_worthiness_ASC
+  check_worthiness_DESC
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CheckWorthyPreviousValues {
+  call: Boolean!
+  check_worthiness: Float
+  created: DateTime!
+}
+
+type CheckWorthySubscriptionPayload {
+  mutation: MutationType!
+  node: CheckWorthy
+  updatedFields: [String!]
+  previousValues: CheckWorthyPreviousValues
+}
+
+input CheckWorthySubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [CheckWorthySubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [CheckWorthySubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [CheckWorthySubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: CheckWorthyWhereInput
+}
+
+input CheckWorthyUpdateManyMutationInput {
+  call: Boolean
+  check_worthiness: Float
+  created: DateTime
+}
+
+input CheckWorthyWhereInput {
+  # Logical AND on all given filters.
+  AND: [CheckWorthyWhereInput!]
+  # Logical OR on all given filters.
+  OR: [CheckWorthyWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [CheckWorthyWhereInput!]
+  call: Boolean
+  # All values that are not equal to given value.
+  call_not: Boolean
+  check_worthiness: Float
+  # All values that are not equal to given value.
+  check_worthiness_not: Float
+  # All values that are contained in given list.
+  check_worthiness_in: [Float!]
+  # All values that are not contained in given list.
+  check_worthiness_not_in: [Float!]
+  # All values less than the given value.
+  check_worthiness_lt: Float
+  # All values less than or equal the given value.
+  check_worthiness_lte: Float
+  # All values greater than the given value.
+  check_worthiness_gt: Float
+  # All values greater than or equal the given value.
+  check_worthiness_gte: Float
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  support_every: AnnotationWhereInput
+  support_some: AnnotationWhereInput
+  support_none: AnnotationWhereInput
+  submitted_by: AgentWhereInput
+}
+
+type Claim implements Node {
+  id: ID!
+  claim_text: String!
+  claim_timestamp: DateTime!
+  support: ClaimSupport!
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+# A connection to a list of items.
+type ClaimConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [ClaimEdge]!
+  aggregate: AggregateClaim!
+}
+
+input ClaimCreateInput {
+  claim_text: String!
+  claim_timestamp: DateTime!
+  created: DateTime!
+  support: ClaimSupportCreateOneInput!
+  submitted_by: AgentCreateOneInput!
+}
+
+# An edge in a connection.
+type ClaimEdge {
+  # The item at the end of the edge.
+  node: Claim!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum ClaimOrderByInput {
+  id_ASC
+  id_DESC
+  claim_text_ASC
+  claim_text_DESC
+  claim_timestamp_ASC
+  claim_timestamp_DESC
+  created_ASC
+  created_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ClaimPreviousValues {
+  id: ID!
+  claim_text: String!
+  claim_timestamp: DateTime!
+  created: DateTime!
+}
+
+type ClaimSubscriptionPayload {
+  mutation: MutationType!
+  node: Claim
+  updatedFields: [String!]
+  previousValues: ClaimPreviousValues
+}
+
+input ClaimSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [ClaimSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ClaimSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ClaimSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: ClaimWhereInput
+}
+
+type ClaimSupport {
+  attributions(
+    where: AttributionWhereInput
+    orderBy: AttributionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Attribution!]
+}
+
+# A connection to a list of items.
+type ClaimSupportConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [ClaimSupportEdge]!
+  aggregate: AggregateClaimSupport!
+}
+
+input ClaimSupportCreateInput {
+  attributions: AttributionCreateManyInput
+}
+
+input ClaimSupportCreateOneInput {
+  create: ClaimSupportCreateInput
+}
+
+# An edge in a connection.
+type ClaimSupportEdge {
+  # The item at the end of the edge.
+  node: ClaimSupport!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum ClaimSupportOrderByInput {
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ClaimSupportSubscriptionPayload {
+  mutation: MutationType!
+  node: ClaimSupport
+  updatedFields: [String!]
+}
+
+input ClaimSupportSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [ClaimSupportSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ClaimSupportSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ClaimSupportSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: ClaimSupportWhereInput
+}
+
+input ClaimSupportUpdateDataInput {
+  attributions: AttributionUpdateManyInput
+}
+
+input ClaimSupportUpdateOneRequiredInput {
+  create: ClaimSupportCreateInput
+  update: ClaimSupportUpdateDataInput
+  upsert: ClaimSupportUpsertNestedInput
+}
+
+input ClaimSupportUpsertNestedInput {
+  update: ClaimSupportUpdateDataInput!
+  create: ClaimSupportCreateInput!
+}
+
+input ClaimSupportWhereInput {
+  # Logical AND on all given filters.
+  AND: [ClaimSupportWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ClaimSupportWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ClaimSupportWhereInput!]
+  attributions_every: AttributionWhereInput
+  attributions_some: AttributionWhereInput
+  attributions_none: AttributionWhereInput
+}
+
+input ClaimUpdateInput {
+  claim_text: String
+  claim_timestamp: DateTime
+  created: DateTime
+  support: ClaimSupportUpdateOneRequiredInput
+  submitted_by: AgentUpdateOneRequiredInput
+}
+
+input ClaimUpdateManyMutationInput {
+  claim_text: String
+  claim_timestamp: DateTime
+  created: DateTime
+}
+
+input ClaimWhereInput {
+  # Logical AND on all given filters.
+  AND: [ClaimWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ClaimWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ClaimWhereInput!]
+  id: ID
+  # All values that are not equal to given value.
+  id_not: ID
+  # All values that are contained in given list.
+  id_in: [ID!]
+  # All values that are not contained in given list.
+  id_not_in: [ID!]
+  # All values less than the given value.
+  id_lt: ID
+  # All values less than or equal the given value.
+  id_lte: ID
+  # All values greater than the given value.
+  id_gt: ID
+  # All values greater than or equal the given value.
+  id_gte: ID
+  # All values containing the given string.
+  id_contains: ID
+  # All values not containing the given string.
+  id_not_contains: ID
+  # All values starting with the given string.
+  id_starts_with: ID
+  # All values not starting with the given string.
+  id_not_starts_with: ID
+  # All values ending with the given string.
+  id_ends_with: ID
+  # All values not ending with the given string.
+  id_not_ends_with: ID
+  claim_text: String
+  # All values that are not equal to given value.
+  claim_text_not: String
+  # All values that are contained in given list.
+  claim_text_in: [String!]
+  # All values that are not contained in given list.
+  claim_text_not_in: [String!]
+  # All values less than the given value.
+  claim_text_lt: String
+  # All values less than or equal the given value.
+  claim_text_lte: String
+  # All values greater than the given value.
+  claim_text_gt: String
+  # All values greater than or equal the given value.
+  claim_text_gte: String
+  # All values containing the given string.
+  claim_text_contains: String
+  # All values not containing the given string.
+  claim_text_not_contains: String
+  # All values starting with the given string.
+  claim_text_starts_with: String
+  # All values not starting with the given string.
+  claim_text_not_starts_with: String
+  # All values ending with the given string.
+  claim_text_ends_with: String
+  # All values not ending with the given string.
+  claim_text_not_ends_with: String
+  claim_timestamp: DateTime
+  # All values that are not equal to given value.
+  claim_timestamp_not: DateTime
+  # All values that are contained in given list.
+  claim_timestamp_in: [DateTime!]
+  # All values that are not contained in given list.
+  claim_timestamp_not_in: [DateTime!]
+  # All values less than the given value.
+  claim_timestamp_lt: DateTime
+  # All values less than or equal the given value.
+  claim_timestamp_lte: DateTime
+  # All values greater than the given value.
+  claim_timestamp_gt: DateTime
+  # All values greater than or equal the given value.
+  claim_timestamp_gte: DateTime
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  support: ClaimSupportWhereInput
+  submitted_by: AgentWhereInput
+}
+
+input ClaimWhereUniqueInput {
+  id: ID
 }
 
 type Content {
@@ -70,3 +1083,755 @@ type Content {
   created: DateTime!
   submitted_by: Agent!
 }
+
+# A connection to a list of items.
+type ContentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [ContentEdge]!
+  aggregate: AggregateContent!
+}
+
+input ContentCreateInput {
+  hash: String
+  mime_type: String
+  data: String
+  created: DateTime!
+  submitted_by: AgentCreateOneInput!
+}
+
+input ContentCreateOneInput {
+  create: ContentCreateInput
+}
+
+# An edge in a connection.
+type ContentEdge {
+  # The item at the end of the edge.
+  node: Content!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum ContentOrderByInput {
+  hash_ASC
+  hash_DESC
+  mime_type_ASC
+  mime_type_DESC
+  data_ASC
+  data_DESC
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ContentPreviousValues {
+  hash: String
+  mime_type: String
+  data: String
+  created: DateTime!
+}
+
+type ContentSubscriptionPayload {
+  mutation: MutationType!
+  node: Content
+  updatedFields: [String!]
+  previousValues: ContentPreviousValues
+}
+
+input ContentSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [ContentSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ContentSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ContentSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: ContentWhereInput
+}
+
+input ContentUpdateManyMutationInput {
+  hash: String
+  mime_type: String
+  data: String
+  created: DateTime
+}
+
+input ContentWhereInput {
+  # Logical AND on all given filters.
+  AND: [ContentWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ContentWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ContentWhereInput!]
+  hash: String
+  # All values that are not equal to given value.
+  hash_not: String
+  # All values that are contained in given list.
+  hash_in: [String!]
+  # All values that are not contained in given list.
+  hash_not_in: [String!]
+  # All values less than the given value.
+  hash_lt: String
+  # All values less than or equal the given value.
+  hash_lte: String
+  # All values greater than the given value.
+  hash_gt: String
+  # All values greater than or equal the given value.
+  hash_gte: String
+  # All values containing the given string.
+  hash_contains: String
+  # All values not containing the given string.
+  hash_not_contains: String
+  # All values starting with the given string.
+  hash_starts_with: String
+  # All values not starting with the given string.
+  hash_not_starts_with: String
+  # All values ending with the given string.
+  hash_ends_with: String
+  # All values not ending with the given string.
+  hash_not_ends_with: String
+  mime_type: String
+  # All values that are not equal to given value.
+  mime_type_not: String
+  # All values that are contained in given list.
+  mime_type_in: [String!]
+  # All values that are not contained in given list.
+  mime_type_not_in: [String!]
+  # All values less than the given value.
+  mime_type_lt: String
+  # All values less than or equal the given value.
+  mime_type_lte: String
+  # All values greater than the given value.
+  mime_type_gt: String
+  # All values greater than or equal the given value.
+  mime_type_gte: String
+  # All values containing the given string.
+  mime_type_contains: String
+  # All values not containing the given string.
+  mime_type_not_contains: String
+  # All values starting with the given string.
+  mime_type_starts_with: String
+  # All values not starting with the given string.
+  mime_type_not_starts_with: String
+  # All values ending with the given string.
+  mime_type_ends_with: String
+  # All values not ending with the given string.
+  mime_type_not_ends_with: String
+  data: String
+  # All values that are not equal to given value.
+  data_not: String
+  # All values that are contained in given list.
+  data_in: [String!]
+  # All values that are not contained in given list.
+  data_not_in: [String!]
+  # All values less than the given value.
+  data_lt: String
+  # All values less than or equal the given value.
+  data_lte: String
+  # All values greater than the given value.
+  data_gt: String
+  # All values greater than or equal the given value.
+  data_gte: String
+  # All values containing the given string.
+  data_contains: String
+  # All values not containing the given string.
+  data_not_contains: String
+  # All values starting with the given string.
+  data_starts_with: String
+  # All values not starting with the given string.
+  data_not_starts_with: String
+  # All values ending with the given string.
+  data_ends_with: String
+  # All values not ending with the given string.
+  data_not_ends_with: String
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  submitted_by: AgentWhereInput
+}
+
+scalar DateTime
+
+# The `Long` scalar type represents non-fractional signed whole numeric values.
+# Long can represent values between -(2^63) and 2^63 - 1.
+scalar Long
+
+type AuthPayload {
+  token: String!
+  Agent: Agent!
+}
+
+type Mutation {
+  submitClaim(title: String!, content: String): Claim!
+  signup(email: String!, password: String!, name: String): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  createClaim(data: ClaimCreateInput!): Claim!
+  createResponse(data: ResponseCreateInput!): Response!
+  createContent(data: ContentCreateInput!): Content!
+  createTruthRating(data: TruthRatingCreateInput!): TruthRating!
+  createCheckWorthy(data: CheckWorthyCreateInput!): CheckWorthy!
+  createAnnotation(data: AnnotationCreateInput!): Annotation!
+  createClaimSupport(data: ClaimSupportCreateInput!): ClaimSupport!
+  createAttribution(data: AttributionCreateInput!): Attribution!
+  createAgent(data: AgentCreateInput!): Agent!
+  updateClaim(data: ClaimUpdateInput!, where: ClaimWhereUniqueInput!): Claim
+  updateAgent(data: AgentUpdateInput!, where: AgentWhereUniqueInput!): Agent
+  deleteClaim(where: ClaimWhereUniqueInput!): Claim
+  deleteAgent(where: AgentWhereUniqueInput!): Agent
+  upsertClaim(
+    where: ClaimWhereUniqueInput!
+    create: ClaimCreateInput!
+    update: ClaimUpdateInput!
+  ): Claim!
+  upsertAgent(
+    where: AgentWhereUniqueInput!
+    create: AgentCreateInput!
+    update: AgentUpdateInput!
+  ): Agent!
+  updateManyClaims(
+    data: ClaimUpdateManyMutationInput!
+    where: ClaimWhereInput
+  ): BatchPayload!
+  updateManyResponses(
+    data: ResponseUpdateManyMutationInput!
+    where: ResponseWhereInput
+  ): BatchPayload!
+  updateManyContents(
+    data: ContentUpdateManyMutationInput!
+    where: ContentWhereInput
+  ): BatchPayload!
+  updateManyTruthRatings(
+    data: TruthRatingUpdateManyMutationInput!
+    where: TruthRatingWhereInput
+  ): BatchPayload!
+  updateManyCheckWorthies(
+    data: CheckWorthyUpdateManyMutationInput!
+    where: CheckWorthyWhereInput
+  ): BatchPayload!
+  updateManyAnnotations(
+    data: AnnotationUpdateManyMutationInput!
+    where: AnnotationWhereInput
+  ): BatchPayload!
+  updateManyAttributions(
+    data: AttributionUpdateManyMutationInput!
+    where: AttributionWhereInput
+  ): BatchPayload!
+  updateManyAgents(
+    data: AgentUpdateManyMutationInput!
+    where: AgentWhereInput
+  ): BatchPayload!
+  deleteManyClaims(where: ClaimWhereInput): BatchPayload!
+  deleteManyResponses(where: ResponseWhereInput): BatchPayload!
+  deleteManyContents(where: ContentWhereInput): BatchPayload!
+  deleteManyTruthRatings(where: TruthRatingWhereInput): BatchPayload!
+  deleteManyCheckWorthies(where: CheckWorthyWhereInput): BatchPayload!
+  deleteManyAnnotations(where: AnnotationWhereInput): BatchPayload!
+  deleteManyClaimSupports(where: ClaimSupportWhereInput): BatchPayload!
+  deleteManyAttributions(where: AttributionWhereInput): BatchPayload!
+  deleteManyAgents(where: AgentWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  me: Agent
+  allClaims: [Claim!]!
+  findClaims(searchString: String): [Claim!]!
+  claims(
+    where: ClaimWhereInput
+    orderBy: ClaimOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Claim]!
+  responses(
+    where: ResponseWhereInput
+    orderBy: ResponseOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Response]!
+  contents(
+    where: ContentWhereInput
+    orderBy: ContentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Content]!
+  truthRatings(
+    where: TruthRatingWhereInput
+    orderBy: TruthRatingOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TruthRating]!
+  checkWorthies(
+    where: CheckWorthyWhereInput
+    orderBy: CheckWorthyOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [CheckWorthy]!
+  annotations(
+    where: AnnotationWhereInput
+    orderBy: AnnotationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Annotation]!
+  claimSupports(
+    where: ClaimSupportWhereInput
+    orderBy: ClaimSupportOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [ClaimSupport]!
+  attributions(
+    where: AttributionWhereInput
+    orderBy: AttributionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Attribution]!
+  agents(
+    where: AgentWhereInput
+    orderBy: AgentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Agent]!
+  claim(where: ClaimWhereUniqueInput!): Claim
+  agent(where: AgentWhereUniqueInput!): Agent
+  claimsConnection(
+    where: ClaimWhereInput
+    orderBy: ClaimOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ClaimConnection!
+  responsesConnection(
+    where: ResponseWhereInput
+    orderBy: ResponseOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ResponseConnection!
+  contentsConnection(
+    where: ContentWhereInput
+    orderBy: ContentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ContentConnection!
+  truthRatingsConnection(
+    where: TruthRatingWhereInput
+    orderBy: TruthRatingOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TruthRatingConnection!
+  checkWorthiesConnection(
+    where: CheckWorthyWhereInput
+    orderBy: CheckWorthyOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CheckWorthyConnection!
+  annotationsConnection(
+    where: AnnotationWhereInput
+    orderBy: AnnotationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AnnotationConnection!
+  claimSupportsConnection(
+    where: ClaimSupportWhereInput
+    orderBy: ClaimSupportOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ClaimSupportConnection!
+  attributionsConnection(
+    where: AttributionWhereInput
+    orderBy: AttributionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AttributionConnection!
+  agentsConnection(
+    where: AgentWhereInput
+    orderBy: AgentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgentConnection!
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+}
+
+type Response {
+  check_worthy: CheckWorthy
+  truth_rating: TruthRating
+  annotation(
+    where: AnnotationWhereInput
+    orderBy: AnnotationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+# A connection to a list of items.
+type ResponseConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [ResponseEdge]!
+  aggregate: AggregateResponse!
+}
+
+input ResponseCreateInput {
+  created: DateTime!
+  check_worthy: CheckWorthyCreateOneInput
+  truth_rating: TruthRatingCreateOneInput
+  annotation: AnnotationCreateManyInput
+  submitted_by: AgentCreateOneInput!
+}
+
+# An edge in a connection.
+type ResponseEdge {
+  # The item at the end of the edge.
+  node: Response!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum ResponseOrderByInput {
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ResponsePreviousValues {
+  created: DateTime!
+}
+
+type ResponseSubscriptionPayload {
+  mutation: MutationType!
+  node: Response
+  updatedFields: [String!]
+  previousValues: ResponsePreviousValues
+}
+
+input ResponseSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [ResponseSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ResponseSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ResponseSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: ResponseWhereInput
+}
+
+input ResponseUpdateManyMutationInput {
+  created: DateTime
+}
+
+input ResponseWhereInput {
+  # Logical AND on all given filters.
+  AND: [ResponseWhereInput!]
+  # Logical OR on all given filters.
+  OR: [ResponseWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [ResponseWhereInput!]
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  check_worthy: CheckWorthyWhereInput
+  truth_rating: TruthRatingWhereInput
+  annotation_every: AnnotationWhereInput
+  annotation_some: AnnotationWhereInput
+  annotation_none: AnnotationWhereInput
+  submitted_by: AgentWhereInput
+}
+
+type Subscription {
+  claim(where: ClaimSubscriptionWhereInput): ClaimSubscriptionPayload
+  response(where: ResponseSubscriptionWhereInput): ResponseSubscriptionPayload
+  content(where: ContentSubscriptionWhereInput): ContentSubscriptionPayload
+  truthRating(
+    where: TruthRatingSubscriptionWhereInput
+  ): TruthRatingSubscriptionPayload
+  checkWorthy(
+    where: CheckWorthySubscriptionWhereInput
+  ): CheckWorthySubscriptionPayload
+  annotation(
+    where: AnnotationSubscriptionWhereInput
+  ): AnnotationSubscriptionPayload
+  claimSupport(
+    where: ClaimSupportSubscriptionWhereInput
+  ): ClaimSupportSubscriptionPayload
+  attribution(
+    where: AttributionSubscriptionWhereInput
+  ): AttributionSubscriptionPayload
+  agent(where: AgentSubscriptionWhereInput): AgentSubscriptionPayload
+}
+
+type TruthRating {
+  call: Boolean!
+  truthiness: Float
+  support(
+    where: AnnotationWhereInput
+    orderBy: AnnotationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+# A connection to a list of items.
+type TruthRatingConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+  # A list of edges.
+  edges: [TruthRatingEdge]!
+  aggregate: AggregateTruthRating!
+}
+
+input TruthRatingCreateInput {
+  call: Boolean
+  truthiness: Float
+  created: DateTime!
+  support: AnnotationCreateManyInput
+  submitted_by: AgentCreateOneInput!
+}
+
+input TruthRatingCreateOneInput {
+  create: TruthRatingCreateInput
+}
+
+# An edge in a connection.
+type TruthRatingEdge {
+  # The item at the end of the edge.
+  node: TruthRating!
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum TruthRatingOrderByInput {
+  call_ASC
+  call_DESC
+  truthiness_ASC
+  truthiness_DESC
+  created_ASC
+  created_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TruthRatingPreviousValues {
+  call: Boolean!
+  truthiness: Float
+  created: DateTime!
+}
+
+type TruthRatingSubscriptionPayload {
+  mutation: MutationType!
+  node: TruthRating
+  updatedFields: [String!]
+  previousValues: TruthRatingPreviousValues
+}
+
+input TruthRatingSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [TruthRatingSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [TruthRatingSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [TruthRatingSubscriptionWhereInput!]
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: TruthRatingWhereInput
+}
+
+input TruthRatingUpdateManyMutationInput {
+  call: Boolean
+  truthiness: Float
+  created: DateTime
+}
+
+input TruthRatingWhereInput {
+  # Logical AND on all given filters.
+  AND: [TruthRatingWhereInput!]
+  # Logical OR on all given filters.
+  OR: [TruthRatingWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [TruthRatingWhereInput!]
+  call: Boolean
+  # All values that are not equal to given value.
+  call_not: Boolean
+  truthiness: Float
+  # All values that are not equal to given value.
+  truthiness_not: Float
+  # All values that are contained in given list.
+  truthiness_in: [Float!]
+  # All values that are not contained in given list.
+  truthiness_not_in: [Float!]
+  # All values less than the given value.
+  truthiness_lt: Float
+  # All values less than or equal the given value.
+  truthiness_lte: Float
+  # All values greater than the given value.
+  truthiness_gt: Float
+  # All values greater than or equal the given value.
+  truthiness_gte: Float
+  created: DateTime
+  # All values that are not equal to given value.
+  created_not: DateTime
+  # All values that are contained in given list.
+  created_in: [DateTime!]
+  # All values that are not contained in given list.
+  created_not_in: [DateTime!]
+  # All values less than the given value.
+  created_lt: DateTime
+  # All values less than or equal the given value.
+  created_lte: DateTime
+  # All values greater than the given value.
+  created_gt: DateTime
+  # All values greater than or equal the given value.
+  created_gte: DateTime
+  support_every: AnnotationWhereInput
+  support_some: AnnotationWhereInput
+  support_none: AnnotationWhereInput
+  submitted_by: AgentWhereInput
+}
+
