@@ -1,26 +1,72 @@
 scalar DateTime
 
-type Query {
-  me: Agent
-  allClaims: [Claim!]!
-  findClaims(searchString: String): [Claim!]!
-  claim(id: ID!): Claim
-}
-
-type Mutation {
-  submitClaim(title: String!, content: String): Claim!
-  signup(email: String!, password: String!, name: String): AuthPayload!
-  login(email: String!, password: String!): AuthPayload!
-}
-
-type AuthPayload {
-  token: String!
-  Agent: Agent!
-}
-
 type Agent {
-  id: ID!
-  email: String!
+  id: String!
+  email: String! 
+  password: String!
   name: String
-  claims: [Claim!]!
+}
+
+type Claim {
+  id: String!
+  claim_text: String!
+  claim_timestamp: DateTime!
+  support: ClaimSupport!
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Response {
+  check_worthy: CheckWorthy,
+  truth_rating: TruthRating,
+  annotation: [Annotation],
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type TruthRating {
+  call: Boolean!
+  truthiness: Float,
+  support: [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+  #
+  #  we have to add a @relation to get this to work     
+  #    refute: [Annotation!] 
+}
+
+type CheckWorthy {
+  call: Boolean!
+  check_worthiness: Float,
+  support: [Annotation!]
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+
+type ClaimSupport {
+  attributions: [Attribution!]
+}
+
+type Attribution {
+  source_url: String
+  snapshot: Content
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Annotation {
+  source_url: String
+  # replace data with graphql-type-json instead of string
+  data: String
+  created: DateTime!
+  submitted_by: Agent!
+}
+
+type Content {
+  hash: String
+  mime_type: String
+  data: String
+  created: DateTime!
+  submitted_by: Agent!
 }
