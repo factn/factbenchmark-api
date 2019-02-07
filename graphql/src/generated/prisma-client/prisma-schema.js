@@ -574,7 +574,7 @@ type Claim {
   id: ID!
   claim_text: String!
   claim_timestamp: DateTime!
-  support: ClaimSupport!
+  support: ClaimSupport
   created: DateTime!
   submitted_by: Agent!
 }
@@ -588,7 +588,7 @@ type ClaimConnection {
 input ClaimCreateInput {
   claim_text: String!
   claim_timestamp: DateTime!
-  support: ClaimSupportCreateOneInput!
+  support: ClaimSupportCreateOneInput
   created: DateTime!
   submitted_by: AgentCreateOneInput!
 }
@@ -691,10 +691,12 @@ input ClaimSupportUpdateDataInput {
   attributions: AttributionUpdateManyInput
 }
 
-input ClaimSupportUpdateOneRequiredInput {
+input ClaimSupportUpdateOneInput {
   create: ClaimSupportCreateInput
   update: ClaimSupportUpdateDataInput
   upsert: ClaimSupportUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
 }
 
 input ClaimSupportUpsertNestedInput {
@@ -714,7 +716,7 @@ input ClaimSupportWhereInput {
 input ClaimUpdateInput {
   claim_text: String
   claim_timestamp: DateTime
-  support: ClaimSupportUpdateOneRequiredInput
+  support: ClaimSupportUpdateOneInput
   created: DateTime
   submitted_by: AgentUpdateOneRequiredInput
 }
